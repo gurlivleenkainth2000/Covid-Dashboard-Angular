@@ -1,0 +1,59 @@
+<div class="container-fluid">
+  <div class="row w-100 m-0 p-2">
+    <div class="col-12 pl-0">
+      <div class="card">
+        <div class="card-header bg-white borer-0">
+          <h4 class="m-0">Countries</h4>
+        </div>
+      </div>
+    </div>
+    <div class="col-12 col-sm-4 mt-3 pl-0" *ngFor="let country of countries; index as idx">
+      <div class="card card-hover" (click)="seeCountryStats(country['country'])">
+        <div class="card-header bg-white border-0">
+          <div class="row w-100 m-0">
+            <div class="col-3 d-flex align-items-center justify-content-center">
+              <img [src]="country['countryInfo']['flag']" alt="" class="shadow-sm" style="border-radius: 25%; object-fit: fill;" width="64px" height="64px">
+            </div>
+            <div class="col-9 d-flex flex-column justify-content-center pl-0">
+              <h5 class="text-wrap m-0">{{ country['country'] }}</h5>
+              <span class="text-sm text-muted" style="font-size: 14px;">
+                {{ country['updated'] | date: "dd-MM-yyyy hh:mm:ss aa" }}
+              </span>
+            </div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="row w-100 m-0">
+            <div class="col-4 cases-stat">
+              <h6 class="m-0 text-sm text-muted" style="font-size: 10px;">ACTIVE</h6>
+              <span style="font-size: 20px;">{{ country['active'] | number:'1.0':'en-US' }}</span>
+            </div>
+            <div class="col-4 cases-stat">
+              <h6 class="m-0 text-sm text-muted" style="font-size: 10px;">DEATHS</h6>
+              <span style="font-size: 20px;">{{ country['deaths'] | number:'1.0':'en-US' }}</span>
+            </div>
+            <div class="col-4 cases-stat">
+              <h6 class="m-0 text-sm text-muted" style="font-size: 10px;">TOTAL</h6>
+              <span style="font-size: 20px;">{{ country['cases'] | number:'1.0':'en-US' }}</span>
+              <!-- <h6 class="m-0 text-sm text-muted" style="font-size: 10px;">RECOVERED</h6>
+              <span style="font-size: 20px;">{{ country['recovered'] | number:'1.0':'en-US'}}</span> -->
+            </div>
+          </div>
+          <!-- <div class="row w-100 mt-2">
+            <div class="col-6 cases-stat">
+              <h6 class="m-0 text-sm text-muted" style="font-size: 10px;">TOTAL</h6>
+              <span style="font-size: 20px;">{{ country['cases'] | number:'1.0':'en-US' }}</span>
+            </div>
+            <div class="col-6 cases-stat">
+              <h6 class="m-0 text-sm text-muted" style="font-size: 10px;">POPULATION</h6>
+              <span style="font-size: 20px;">{{ country['population'] | number:'1.0':'en-US' }}</span>
+
+            </div>
+          </div> -->
+        </div>
+      </div>
+    </div>
+    <!-- <div class="col d-flex flex-wrap">
+    </div> -->
+  </div>
+</div>

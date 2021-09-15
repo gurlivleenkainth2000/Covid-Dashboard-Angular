@@ -1,0 +1,192 @@
+<div class="d-flex flex-column align-items-center justify-content-center vh-100" *ngIf="fetching">
+  <div class="spinner-grow" role="status" style="font-size: 64px !important;">
+    <span class="sr-only">Loading...</span>
+  </div>
+  <h4 class="mt-2">Fetching...</h4>
+</div>
+<div class="container-fluid" *ngIf="!fetching">
+  <div class="row w-100 m-0 p-2">
+    <div class="col-6"></div>
+    <div class="col-6">
+      <div class="d-flex align-items-center justify-content-end">
+        <div class="form-group col m-0 pr-0 mr-2">
+          <input type="text" placeholder="Choose Country" class="form-control" list="countries" (change)="changeCountry($event.target.value)">
+          <datalist id="countries">
+            <option *ngFor="let country of countries; index as idx" [value]="country">{{ country }}</option>
+          </datalist>
+        </div>
+        <select name="days" [(ngModel)]="days" class="custom-select col-4" (change)="changeDays($event.target.value)">
+          <option [value]="30">30 Days</option>
+          <option [value]="60">60 Days</option>
+          <option [value]="90">90 Days</option>
+          <option [value]="120">120 Days</option>
+          <option [value]="180">180 Days</option>
+        </select>
+      </div>
+    </div>
+  </div>
+  <div class="row w-100 m-0 p-2">
+    <div class="col-12" style="height: 100%;">
+      <div class="card shadow-sm">
+        <div class="card-header bg-white border-0">
+          <h4>{{ countryObj['country'] || "" }} Covid-19 Stats</h4>
+        </div>
+        <div class="card-body">
+          <div class="row w-100 m-0">
+            <div class="col-4 cases-stat">
+              <h6 class="m-0 text-sm text-muted" style="font-size: 10px;">TODAY CASES</h6>
+              <span style="font-size: 20px;">{{ countryObj['todayCases'] | number:'1.0':'en-US' }}</span>
+            </div>
+            <div class="col-4 cases-stat">
+              <h6 class="m-0 text-sm text-muted" style="font-size: 10px;">TODAY DEATHS</h6>
+              <span style="font-size: 20px;">{{ countryObj['todayDeaths'] | number:'1.0':'en-US' }}</span>
+            </div>
+            <div class="col-4 cases-stat">
+              <h6 class="m-0 text-sm text-muted" style="font-size: 10px;">TODAY RECOVERED</h6>
+              <span style="font-size: 20px;">{{ countryObj['todayRecovered'] | number:'1.0':'en-US' }}</span>
+              <!-- <h6 class="m-0 text-sm text-muted" style="font-size: 10px;">RECOVERED</h6>
+              <span style="font-size: 20px;">{{ countryObj['recovered'] | number:'1.0':'en-US'}}</span> -->
+            </div>
+          </div>
+          <div class="row w-100 m-0 mt-3">
+            <div class="col-4 cases-stat">
+              <h6 class="m-0 text-sm text-muted" style="font-size: 10px;">ACTIVE</h6>
+              <span style="font-size: 20px;">{{ countryObj['active'] | number:'1.0':'en-US' }}</span>
+            </div>
+            <div class="col-4 cases-stat">
+              <h6 class="m-0 text-sm text-muted" style="font-size: 10px;">CRITICAL</h6>
+              <span style="font-size: 20px;">{{ countryObj['critical'] | number:'1.0':'en-US' }}</span>
+            </div>
+            <div class="col-4 cases-stat">
+              <h6 class="m-0 text-sm text-muted" style="font-size: 10px;">POPULATION</h6>
+              <span style="font-size: 20px;">{{ countryObj['population'] | number:'1.0':'en-US' }}</span>
+              <!-- <h6 class="m-0 text-sm text-muted" style="font-size: 10px;">RECOVERED</h6>
+              <span style="font-size: 20px;">{{ countryObj['recovered'] | number:'1.0':'en-US'}}</span> -->
+            </div>
+          </div>
+          <div class="row w-100 m-0 mt-3">
+            <div class="col-4 cases-stat">
+              <h6 class="m-0 text-sm text-muted" style="font-size: 10px;">CASES</h6>
+              <span style="font-size: 20px;">{{ countryObj['cases'] | number:'1.0':'en-US' }}</span>
+            </div>
+            <div class="col-4 cases-stat">
+              <h6 class="m-0 text-sm text-muted" style="font-size: 10px;">DEATHS</h6>
+              <span style="font-size: 20px;">{{ countryObj['deaths'] | number:'1.0':'en-US' }}</span>
+            </div>
+            <div class="col-4 cases-stat">
+              <h6 class="m-0 text-sm text-muted" style="font-size: 10px;">Recovered</h6>
+              <span style="font-size: 20px;">{{ countryObj['recovered'] | number:'1.0':'en-US' }}</span>
+              <!-- <h6 class="m-0 text-sm text-muted" style="font-size: 10px;">RECOVERED</h6>
+              <span style="font-size: 20px;">{{ country['recovered'] | number:'1.0':'en-US'}}</span> -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row w-100 m-0 p-2">
+    <div class="col-12 col-sm-4">
+      <app-pie-chart
+        [data]="[countryObj['cases'], countryObj['deaths'],countryObj['recovered']]"
+        [labels]="['Cases', 'Deaths', 'Recovered']"
+        [legend]="true"
+        [title]="'Overall Percentage'"
+        [height]="100"
+        [colors]="['#FFFF00', '#FF3D00', '#76FF03']"
+        [legendPosition]="'right'">
+      </app-pie-chart>
+    </div>
+    <div class="col-12 col-sm-4 pl-0">
+      <app-pie-chart
+        [data]="[countryObj['recovered'], countryObj['cases']]"
+        [labels]="['Rate', 'Remaining']"
+        [legend]="true"
+        [title]="'Recovery Rate Percentage'"
+        [height]="100"
+        [colors]="['#ff9500', '#d8d8d8']"
+        [legendPosition]="'right'"
+        [calcBool]="true">
+      </app-pie-chart>
+    </div>
+    <div class="col-12 col-sm-4 pl-0">
+      <app-pie-chart
+        [data]="[countryObj['deaths'], countryObj['cases']]"
+        [labels]="['Rate', 'Remaining']"
+        [legend]="true"
+        [title]="'Case Fatality Percentage'"
+        [height]="100"
+        [colors]="['#00ffd9', '#d8d8d8']"
+        [legendPosition]="'right'"
+        [calcBool]="true">
+      </app-pie-chart>
+    </div>
+  </div>
+  <div class="row w-100 m-0 p-2" *ngIf="!previousRecord">
+    <div class="col">
+      <div class="card">
+        <div class="card-body">
+          <div class="d-flex flex-column align-items-center justify-content-center">
+            <img src="./../../assets/empty.svg" class="img-fluid" alt="" height="256px" width="256px">
+            <h4 class="m-0 mt-4">No History Found</h4>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row w-100 m-0 p-2" *ngIf="previousRecord">
+    <div class="col-12">
+      <div class="card shadow-sm">
+        <div class="card-header bg-white border-0">
+          <h4>Cases</h4>
+        </div>
+        <div class="card-body">
+          <canvas baseChart height="100"
+            [datasets]="lineChartData_CASES"
+            [labels]="lineChartLabels"
+            [options]="lineChartOptions_CASES"
+            [colors]="lineChartColors_CASES"
+            [legend]="lineChartLegend"
+            [chartType]="lineChartType"
+            [plugins]="lineChartPlugins">
+          </canvas>
+        </div>
+      </div>
+    </div>
+    <div class="col-12 mt-2">
+      <div class="card shadow-sm">
+        <div class="card-header bg-white border-0">
+          <h4>Deaths</h4>
+        </div>
+        <div class="card-body">
+          <canvas baseChart height="100"
+          [datasets]="lineChartData_DEATHS"
+          [labels]="lineChartLabels"
+          [options]="lineChartOptions_DEATHS"
+          [colors]="lineChartColors_DEATHS"
+          [legend]="lineChartLegend"
+          [chartType]="lineChartType"
+          [plugins]="lineChartPlugins">
+        </canvas>
+        </div>
+      </div>
+    </div>
+    <div class="col-12 mt-2">
+      <div class="card shadow-sm">
+        <div class="card-header bg-white border-0">
+          <h4>Recovered</h4>
+        </div>
+        <div class="card-body">
+          <canvas baseChart height="100"
+          [datasets]="lineChartData_RECOVERED"
+          [labels]="lineChartLabels"
+          [options]="lineChartOptions_RECOVERED"
+          [colors]="lineChartColors_RECOVERED"
+          [legend]="lineChartLegend"
+          [chartType]="lineChartType"
+          [plugins]="lineChartPlugins">
+        </canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

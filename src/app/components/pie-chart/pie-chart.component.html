@@ -1,0 +1,17 @@
+<div class="card">
+  <div class="card-header bg-white border-0">
+    <h4>{{ title }}</h4>
+  </div>
+  <div class="card-body">
+    <canvas baseChart
+      height="{{ height }}"
+      [data]="pieChartData"
+      [labels]="labels"
+      [options]="pieChartOptions"
+      [colors]="pieChartColors"
+      [legend]="legend"
+      [chartType]="pieChartType"
+      [plugins]="pieChartPlugins">
+    </canvas>
+  </div>
+</div>
